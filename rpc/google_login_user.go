@@ -10,7 +10,7 @@ import (
 )
 
 func (s *authServer) GoogleLoginUser(ctx context.Context, req *ag.GoogleLoginUserRequest) (*ag.LoginUserResponse, error) {
-	claims, err := s.google.ValidateGoogleJWT(req.Token)
+	claims, err := s.goog.ValidateGoogleJWT(req.Token)
 	if err != nil {
 		return nil, utils.HandleError(err)
 	}
