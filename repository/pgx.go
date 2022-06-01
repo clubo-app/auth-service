@@ -51,7 +51,7 @@ func validateSchema(url url.URL) error {
 	url.Scheme = "pgx"
 	url2 := fmt.Sprintf("%v%v", url.String(), "?sslmode=disable")
 	g := g.Github{}
-	d, err := g.Open("github://clubo-app/user-service/repository/migrations")
+	d, err := g.Open("github://clubo-app/auth-service/repository/migrations")
 	if err != nil {
 		return err
 	}
