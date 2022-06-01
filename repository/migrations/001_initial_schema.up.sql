@@ -13,4 +13,4 @@ CREATE TABLE accounts (
     type type NULL
 );
 
-CREATE UNIQUE INDEX email_idx ON users (email);
+CREATE UNIQUE INDEX email_idx ON accounts (email);
