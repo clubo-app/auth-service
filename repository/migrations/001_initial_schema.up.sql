@@ -1,6 +1,6 @@
-CREATE TYPE provider AS ENUM ('google', 'facebook', 'apple');
-CREATE TYPE role AS ENUM ('admin', 'dev', 'user');
-CREATE TYPE type AS ENUM ('user', 'company');
+CREATE TYPE IF NOT EXISTS provider AS ENUM ('google', 'facebook', 'apple');
+CREATE TYPE IF NOT EXISTS role AS ENUM ('admin', 'dev', 'user');
+CREATE TYPE IF NOT EXISTS type AS ENUM ('user', 'company');
 
 CREATE TABLE accounts (
     id char(27) PRIMARY KEY,
