@@ -125,46 +125,6 @@ func (q *Queries) GetAccountByEmail(ctx context.Context, email string) (Account,
 	return i, err
 }
 
-const updateAccount = `-- name: UpdateAccount :one
-UPDATE accounts SET
-    email = $1,
-    email_code = $2,
-    password_hash = $3,
-    role = $4
-WHERE id = $5
-RETURNING id, email, email_verified, email_code, password_hash, provider, role, type
-`
-
-type UpdateAccountParams struct {
-	Email        sql.NullString
-	EmailCode    sql.NullString
-	PasswordHash sql.NullString
-	Role         Role
-	ID           string
-}
-
-func (q *Queries) UpdateAccount(ctx context.Context, arg UpdateAccountParams) (Account, error) {
-	row := q.db.QueryRow(ctx, updateAccount,
-		arg.Email,
-		arg.EmailCode,
-		arg.PasswordHash,
-		arg.Role,
-		arg.ID,
-	)
-	var i Account
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.EmailVerified,
-		&i.EmailCode,
-		&i.PasswordHash,
-		&i.Provider,
-		&i.Role,
-		&i.Type,
-	)
-	return i, err
-}
-
 const updateEmailCode = `-- name: UpdateEmailCode :one
 UPDATE accounts 
 SET email_code = $1

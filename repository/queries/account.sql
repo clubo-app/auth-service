@@ -13,15 +13,6 @@ INSERT INTO accounts (
 )
 RETURNING *;
 
--- name: UpdateAccount :one
-UPDATE accounts SET
-    email = sqlc.narg('email'),
-    email_code = sqlc.narg('email_code'),
-    password_hash = sqlc.narg('password_hash'),
-    role = sqlc.narg('role')
-WHERE id = sqlc.arg('id')
-RETURNING *;
-
 -- name: DeleteAccount :exec
 DELETE FROM accounts
 WHERE id = $1;

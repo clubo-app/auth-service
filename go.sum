@@ -203,6 +203,8 @@ github.com/clubo-app/packages v0.0.0-20220529184338-03bf6fbe85dc h1:x2uNY2pydfYU
 github.com/clubo-app/packages v0.0.0-20220529184338-03bf6fbe85dc/go.mod h1:aF4EK+TRUS4mSgaGjHCkA1ebA593tSYiSWYQaSqVTGc=
 github.com/clubo-app/protobuf v0.0.0-20220530202201-c3e86f185d1a h1:hpzZtUszf4VQZobhbv2xdgOhBeZ/DYfHGKAQDZwor/s=
 github.com/clubo-app/protobuf v0.0.0-20220530202201-c3e86f185d1a/go.mod h1:HjqyM6gBb0BF7Vvj+zFYOrZDBaWDEougmcuMmYg9KKU=
+github.com/clubo-app/protobuf v0.0.0-20220601172316-8dde70f4bcaa h1:W+IB5atPsTajD1B1UEl1d2NJRj1e9LeX4+8PXb6cRh0=
+github.com/clubo-app/protobuf v0.0.0-20220601172316-8dde70f4bcaa/go.mod h1:HjqyM6gBb0BF7Vvj+zFYOrZDBaWDEougmcuMmYg9KKU=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
 github.com/cncf/udpa/go v0.0.0-20200629203442-efcf912fb354/go.mod h1:WmhPx2Nbnhtbo57+VJT5O0JRkEi1Wbu0z5j0R8u5Hbk=
 github.com/cncf/udpa/go v0.0.0-20201120205902-5459f2c99403/go.mod h1:WmhPx2Nbnhtbo57+VJT5O0JRkEi1Wbu0z5j0R8u5Hbk=
@@ -813,6 +815,8 @@ github.com/labstack/gommon v0.3.1 h1:OomWaJXm7xR6L1HmEtGyQf26TEn7V6X88mktX9kee9o
 github.com/labstack/gommon v0.3.1/go.mod h1:uW6kP17uPlLJsD3ijUYn3/M5bAxtlZhMI6m3MFxTMTM=
 github.com/leodido/go-urn v1.2.1 h1:BqpAaACuzVSgi/VLzGZIobT2z4v53pjosyNd9Yv6n/w=
 github.com/leodido/go-urn v1.2.1/go.mod h1:zt4jvISO2HfUBqxjfIshjdMTYS56ZS/qv49ictyFfxY=
+github.com/leporo/sqlf v1.3.0 h1:nAkuPYxMIJg/sUmcd1h4avV5iYo8tBTGEGOIR4BIZO8=
+github.com/leporo/sqlf v1.3.0/go.mod h1:f4dHqIi1+nLl6k1IsNQ8QIEbGWK49th2ei1IxTXk+2E=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.1.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.2.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=

@@ -14,7 +14,6 @@ type Querier interface {
 	EmailTaken(ctx context.Context, email string) (bool, error)
 	GetAccount(ctx context.Context, id string) (Account, error)
 	GetAccountByEmail(ctx context.Context, email string) (Account, error)
-	UpdateAccount(ctx context.Context, arg UpdateAccountParams) (Account, error)
 	UpdateEmailCode(ctx context.Context, arg UpdateEmailCodeParams) (Account, error)
 	UpdateVerified(ctx context.Context, arg UpdateVerifiedParams) (Account, error)
 }

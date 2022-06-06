@@ -23,15 +23,15 @@ type AccountService interface {
 }
 
 type accountService struct {
-	q *repository.Queries
+	r *repository.AccountRepository
 }
 
-func NewAccountService(q *repository.Queries) AccountService {
-	return &accountService{q: q}
+func NewAccountService(r *repository.AccountRepository) AccountService {
+	return &accountService{r: r}
 }
 
 func (s *accountService) Create(ctx context.Context, d dto.Account) (repository.Account, error) {
-	a, err := s.q.CreateAccount(ctx, repository.CreateAccountParams{
+	a, err := s.r.CreateAccount(ctx, repository.CreateAccountParams{
 		ID:            d.ID,
 		Email:         d.Email,
 		EmailVerified: d.EmailVerified,
@@ -49,7 +49,7 @@ func (s *accountService) Create(ctx context.Context, d dto.Account) (repository.
 }
 
 func (s *accountService) Delete(ctx context.Context, id string) error {
-	err := s.q.DeleteAccount(ctx, id)
+	err := s.r.DeleteAccount(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -57,11 +57,11 @@ func (s *accountService) Delete(ctx context.Context, id string) error {
 }
 
 func (s *accountService) Update(ctx context.Context, d dto.Account) (repository.Account, error) {
-	a, err := s.q.UpdateAccount(ctx, repository.UpdateAccountParams{
+	a, err := s.r.UpdateAccount(ctx, repository.UpdateAccountParams{
 		ID:           d.ID,
-		Email:        sql.NullString{String: d.Email, Valid: d.Email != ""},
-		EmailCode:    sql.NullString{String: d.EmailCode, Valid: d.EmailCode != ""},
-		PasswordHash: sql.NullString{String: d.PasswordHash, Valid: d.PasswordHash != ""},
+		Email:        d.Email,
+		EmailCode:    d.EmailCode,
+		PasswordHash: d.PasswordHash,
 		Role:         d.Role,
 	})
 	if err != nil {
@@ -72,7 +72,7 @@ func (s *accountService) Update(ctx context.Context, d dto.Account) (repository.
 }
 
 func (s *accountService) UpdateVerified(ctx context.Context, id, code string, emailVerified bool) (repository.Account, error) {
-	a, err := s.q.UpdateVerified(ctx, repository.UpdateVerifiedParams{
+	a, err := s.r.UpdateVerified(ctx, repository.UpdateVerifiedParams{
 		ID:       id,
 		Verified: emailVerified,
 		Code:     sql.NullString{String: code, Valid: true},
@@ -90,7 +90,7 @@ func (s *accountService) RotateEmailCode(ctx context.Context, email string) (rep
 		return repository.Account{}, status.Error(codes.Internal, "Failed to generate Email Code")
 	}
 
-	a, err := s.q.UpdateEmailCode(ctx, repository.UpdateEmailCodeParams{
+	a, err := s.r.UpdateEmailCode(ctx, repository.UpdateEmailCodeParams{
 		EmailCode: sql.NullString{String: code, Valid: true},
 		Email:     email,
 	})
@@ -102,7 +102,7 @@ func (s *accountService) RotateEmailCode(ctx context.Context, email string) (rep
 }
 
 func (s *accountService) EmailTaken(ctx context.Context, email string) bool {
-	t, err := s.q.EmailTaken(ctx, email)
+	t, err := s.r.EmailTaken(ctx, email)
 	if err != nil {
 		return false
 	}
@@ -110,7 +110,7 @@ func (s *accountService) EmailTaken(ctx context.Context, email string) bool {
 }
 
 func (s *accountService) GetById(ctx context.Context, id string) (repository.Account, error) {
-	a, err := s.q.GetAccount(ctx, id)
+	a, err := s.r.GetAccount(ctx, id)
 	if err != nil {
 		return repository.Account{}, err
 	}
@@ -119,7 +119,7 @@ func (s *accountService) GetById(ctx context.Context, id string) (repository.Acc
 }
 
 func (s *accountService) GetByEmail(ctx context.Context, email string) (repository.Account, error) {
-	a, err := s.q.GetAccountByEmail(ctx, email)
+	a, err := s.r.GetAccountByEmail(ctx, email)
 	if err != nil {
 		return repository.Account{}, err
 	}
