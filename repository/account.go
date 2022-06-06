@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 
+	_ "github.com/golang-migrate/migrate/v4/database/pgx"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/leporo/sqlf"
 )
