@@ -8,7 +8,7 @@ CREATE TABLE accounts (
     email_verified BOOLEAN NOT NULL DEFAULT false,
     email_code TEXT,
     password_hash TEXT NOT NULL,
-    provider provider NULL,
+    provider provider DEFAULT NULL,
     role role NULL,
     type type NULL
 );
