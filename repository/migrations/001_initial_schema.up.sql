@@ -1,6 +1,6 @@
-CREATE TYPE provider AS ENUM ('google', 'facebook', 'apple');
-CREATE TYPE role AS ENUM ('admin', 'dev', 'user');
-CREATE TYPE type AS ENUM ('user', 'company');
+CREATE TYPE provider AS ENUM ('GOOGLE', 'FACEBOOK', 'APPLE');
+CREATE TYPE role AS ENUM ('ADMIN', 'DEV', 'USER');
+CREATE TYPE type AS ENUM ('USER', 'COMPANY');
 
 CREATE TABLE accounts (
     id char(27) PRIMARY KEY,
@@ -9,8 +9,8 @@ CREATE TABLE accounts (
     email_code TEXT,
     password_hash TEXT NOT NULL,
     provider provider DEFAULT NULL,
-    role role NULL,
-    type type NULL
+    role role NULL  DEFAULT "USER",
+    type type NULL  DEFAULT "USER"
 );
 
 CREATE UNIQUE INDEX email_idx ON accounts (email);

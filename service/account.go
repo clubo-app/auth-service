@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"strings"
 
 	"github.com/clubo-app/auth-service/dto"
 	"github.com/clubo-app/auth-service/repository"
@@ -42,6 +43,9 @@ func (s *accountService) Create(ctx context.Context, d dto.Account) (repository.
 		Type:          d.Type,
 	})
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key value violates unique constraint \"email_idx\"") {
+			return repository.Account{}, status.Error(codes.InvalidArgument, "Email already taken")
+		}
 		return repository.Account{}, err
 	}
 
