@@ -57,7 +57,7 @@ func (d AccountRepository) Close() {
 	d.pool.Close()
 }
 
-const columns = "id, email, email_verified, email_code, password_hash, provider, role, type"
+const columns = "id, email, email_verified, email_code, password_hash, provider, type"
 
 func (r AccountRepository) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
 	return r.querier.CreateAccount(ctx, arg)
@@ -67,7 +67,6 @@ type UpdateAccountParams struct {
 	Email        string
 	EmailCode    string
 	PasswordHash string
-	Role         Role
 	ID           string
 }
 
@@ -84,9 +83,6 @@ func (r AccountRepository) UpdateAccount(ctx context.Context, arg UpdateAccountP
 	if arg.PasswordHash != "" {
 		b = b.Set("password_hash", arg.PasswordHash)
 	}
-	if arg.Role != "" {
-		b = b.Set("role", arg.Role)
-	}
 
 	b.
 		Where("id = ?", arg.ID).
@@ -101,7 +97,6 @@ func (r AccountRepository) UpdateAccount(ctx context.Context, arg UpdateAccountP
 		&i.EmailCode,
 		&i.PasswordHash,
 		&i.Provider,
-		&i.Role,
 		&i.Type,
 	)
 	return i, err

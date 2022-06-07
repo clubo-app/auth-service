@@ -21,9 +21,8 @@ func (s *authServer) AppleLoginUser(ctx context.Context, req *ag.AppleLoginUserR
 		Email:         claims.Email,
 		EmailVerified: claims.EmailVerified,
 		EmailCode:     code,
-		Provider:      repository.ProviderApple,
-		Role:          repository.RoleUser,
-		Type:          repository.TypeUser,
+		Provider:      repository.ProviderAPPLE,
+		Type:          repository.TypeUSER,
 	}
 
 	a, err := s.ac.Create(ctx, da)

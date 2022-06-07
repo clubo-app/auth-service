@@ -24,7 +24,7 @@ func (t tokenManager) NewJWT(u repository.Account) (string, error) {
 		"sub":           u.ID,
 		"iss":           "sessions.com",
 		"emailVerified": u.EmailVerified,
-		"role":          u.Role,
+		"role":          u.Type,
 		"iat":           time.Now().Unix(),
 	}
 

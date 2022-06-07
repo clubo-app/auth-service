@@ -33,9 +33,8 @@ func (s *authServer) RegisterUser(ctx context.Context, req *ag.RegisterUserReque
 		EmailCode:     code,
 		PasswordHash:  hash,
 		// TODO: when we have nullable enums replace with null value
-		Provider: repository.ProviderGoogle,
-		Role:     repository.RoleUser,
-		Type:     repository.TypeUser,
+		Provider: repository.ProviderGOOGLE,
+		Type:     repository.TypeUSER,
 	}
 
 	a, err := s.ac.Create(ctx, da)

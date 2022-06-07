@@ -21,9 +21,8 @@ func (s *authServer) GoogleLoginUser(ctx context.Context, req *ag.GoogleLoginUse
 		Email:         claims.Email,
 		EmailVerified: claims.EmailVerified,
 		EmailCode:     code,
-		Provider:      repository.ProviderGoogle,
-		Role:          repository.RoleUser,
-		Type:          repository.TypeUser,
+		Provider:      repository.ProviderGOOGLE,
+		Type:          repository.TypeUSER,
 	}
 
 	a, err := s.ac.Create(ctx, da)

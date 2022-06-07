@@ -39,7 +39,6 @@ func (s *accountService) Create(ctx context.Context, d dto.Account) (repository.
 		EmailCode:     sql.NullString{String: d.EmailCode, Valid: d.EmailCode != ""},
 		PasswordHash:  d.PasswordHash,
 		Provider:      d.Provider,
-		Role:          d.Role,
 		Type:          d.Type,
 	})
 	if err != nil {
@@ -66,7 +65,6 @@ func (s *accountService) Update(ctx context.Context, d dto.Account) (repository.
 		Email:        d.Email,
 		EmailCode:    d.EmailCode,
 		PasswordHash: d.PasswordHash,
-		Role:         d.Role,
 	})
 	if err != nil {
 		return repository.Account{}, err

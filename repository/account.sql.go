@@ -18,12 +18,11 @@ INSERT INTO accounts (
     email_code,
     password_hash,
     provider,
-    role,
     type
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8
+    $1, $2, $3, $4, $5, $6, $7
 )
-RETURNING id, email, email_verified, email_code, password_hash, provider, role, type
+RETURNING id, email, email_verified, email_code, password_hash, provider, type
 `
 
 type CreateAccountParams struct {
@@ -33,7 +32,6 @@ type CreateAccountParams struct {
 	EmailCode     sql.NullString
 	PasswordHash  string
 	Provider      Provider
-	Role          Role
 	Type          Type
 }
 
@@ -45,7 +43,6 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (A
 		arg.EmailCode,
 		arg.PasswordHash,
 		arg.Provider,
-		arg.Role,
 		arg.Type,
 	)
 	var i Account
@@ -56,7 +53,6 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (A
 		&i.EmailCode,
 		&i.PasswordHash,
 		&i.Provider,
-		&i.Role,
 		&i.Type,
 	)
 	return i, err
@@ -84,7 +80,7 @@ func (q *Queries) EmailTaken(ctx context.Context, email string) (bool, error) {
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT id, email, email_verified, email_code, password_hash, provider, role, type FROM accounts
+SELECT id, email, email_verified, email_code, password_hash, provider, type FROM accounts
 WHERE id = $1 LIMIT 1
 `
 
@@ -98,14 +94,13 @@ func (q *Queries) GetAccount(ctx context.Context, id string) (Account, error) {
 		&i.EmailCode,
 		&i.PasswordHash,
 		&i.Provider,
-		&i.Role,
 		&i.Type,
 	)
 	return i, err
 }
 
 const getAccountByEmail = `-- name: GetAccountByEmail :one
-SELECT id, email, email_verified, email_code, password_hash, provider, role, type FROM accounts
+SELECT id, email, email_verified, email_code, password_hash, provider, type FROM accounts
 WHERE email = $1 LIMIT 1
 `
 
@@ -119,7 +114,6 @@ func (q *Queries) GetAccountByEmail(ctx context.Context, email string) (Account,
 		&i.EmailCode,
 		&i.PasswordHash,
 		&i.Provider,
-		&i.Role,
 		&i.Type,
 	)
 	return i, err
@@ -129,7 +123,7 @@ const updateEmailCode = `-- name: UpdateEmailCode :one
 UPDATE accounts 
 SET email_code = $1
 WHERE email = $2
-RETURNING id, email, email_verified, email_code, password_hash, provider, role, type
+RETURNING id, email, email_verified, email_code, password_hash, provider, type
 `
 
 type UpdateEmailCodeParams struct {
@@ -147,7 +141,6 @@ func (q *Queries) UpdateEmailCode(ctx context.Context, arg UpdateEmailCodeParams
 		&i.EmailCode,
 		&i.PasswordHash,
 		&i.Provider,
-		&i.Role,
 		&i.Type,
 	)
 	return i, err
@@ -157,7 +150,7 @@ const updateVerified = `-- name: UpdateVerified :one
 UPDATE accounts 
 SET email_verified = IF(email_code = $1, $2::boolean, email_code)
 WHERE id = $3
-RETURNING id, email, email_verified, email_code, password_hash, provider, role, type
+RETURNING id, email, email_verified, email_code, password_hash, provider, type
 `
 
 type UpdateVerifiedParams struct {
@@ -176,7 +169,6 @@ func (q *Queries) UpdateVerified(ctx context.Context, arg UpdateVerifiedParams) 
 		&i.EmailCode,
 		&i.PasswordHash,
 		&i.Provider,
-		&i.Role,
 		&i.Type,
 	)
 	return i, err

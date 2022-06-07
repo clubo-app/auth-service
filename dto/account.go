@@ -11,6 +11,5 @@ type Account struct {
 	EmailCode     string
 	PasswordHash  string
 	Provider      repository.Provider
-	Role          repository.Role
 	Type          repository.Type
 }

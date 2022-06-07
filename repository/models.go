@@ -12,9 +12,9 @@ import (
 type Provider string
 
 const (
-	ProviderGoogle   Provider = "google"
-	ProviderFacebook Provider = "facebook"
-	ProviderApple    Provider = "apple"
+	ProviderGOOGLE   Provider = "GOOGLE"
+	ProviderFACEBOOK Provider = "FACEBOOK"
+	ProviderAPPLE    Provider = "APPLE"
 )
 
 func (e *Provider) Scan(src interface{}) error {
@@ -29,31 +29,13 @@ func (e *Provider) Scan(src interface{}) error {
 	return nil
 }
 
-type Role string
-
-const (
-	RoleAdmin Role = "admin"
-	RoleDev   Role = "dev"
-	RoleUser  Role = "user"
-)
-
-func (e *Role) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = Role(s)
-	case string:
-		*e = Role(s)
-	default:
-		return fmt.Errorf("unsupported scan type for Role: %T", src)
-	}
-	return nil
-}
-
 type Type string
 
 const (
-	TypeUser    Type = "user"
-	TypeCompany Type = "company"
+	TypeUSER    Type = "USER"
+	TypeADMIN   Type = "ADMIN"
+	TypeDEV     Type = "DEV"
+	TypeCOMPANY Type = "COMPANY"
 )
 
 func (e *Type) Scan(src interface{}) error {
@@ -75,6 +57,5 @@ type Account struct {
 	EmailCode     sql.NullString
 	PasswordHash  string
 	Provider      Provider
-	Role          Role
 	Type          Type
 }

@@ -5,46 +5,36 @@ import (
 	"net/url"
 
 	ag "github.com/clubo-app/protobuf/auth"
-	"github.com/clubo-app/protobuf/common"
 	"github.com/golang-migrate/migrate/v4"
 	g "github.com/golang-migrate/migrate/v4/source/github"
 )
 
-func (p Provider) ToGRPCProvider() common.Provider {
+func (p Provider) ToGRPCProvider() ag.Provider {
 	switch p {
-	case ProviderApple:
-		return common.Provider_APPLE
-	case ProviderFacebook:
-		return common.Provider_FACEBOOK
-	case ProviderGoogle:
-		return common.Provider_GOOGLE
+	case ProviderAPPLE:
+		return ag.Provider_APPLE
+	case ProviderFACEBOOK:
+		return ag.Provider_FACEBOOK
+	case ProviderGOOGLE:
+		return ag.Provider_GOOGLE
 	default:
 		// TODO: make this return null
 		return 4
 	}
 }
 
-func (r Role) ToGRPCRole() common.Role {
-	switch r {
-	case RoleAdmin:
-		return common.Role_ADMIN
-	case RoleDev:
-		return common.Role_DEV
-	case RoleUser:
-		return common.Role_USER
-	default:
-		return common.Role_USER
-	}
-}
-
-func (t Type) ToGRPCAccountType() ag.AccountType {
+func (t Type) ToGRPCAccountType() ag.Type {
 	switch t {
-	case TypeCompany:
-		return ag.AccountType_COMPANY
-	case TypeUser:
-		return ag.AccountType_USER
+	case TypeCOMPANY:
+		return ag.Type_COMPANY
+	case TypeUSER:
+		return ag.Type_USER
+	case TypeADMIN:
+		return ag.Type_ADMIN
+	case TypeDEV:
+		return ag.Type_DEV
 	default:
-		return ag.AccountType_USER
+		return ag.Type_USER
 	}
 }
 
@@ -55,7 +45,6 @@ func (a Account) ToGRPCAccount() *ag.Account {
 		EmailVerified: a.EmailVerified,
 		EmailCode:     a.EmailCode.String,
 		Provider:      a.Provider.ToGRPCProvider(),
-		Role:          a.Role.ToGRPCRole(),
 		Type:          a.Type.ToGRPCAccountType(),
 	}
 }
