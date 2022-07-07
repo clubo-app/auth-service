@@ -1,16 +1,26 @@
 package repository
 
 import (
+	"embed"
 	"fmt"
 	"net/url"
 
 	ag "github.com/clubo-app/protobuf/auth"
 	"github.com/golang-migrate/migrate/v4"
-	g "github.com/golang-migrate/migrate/v4/source/github"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 )
 
-func (p Provider) ToGRPCProvider() ag.Provider {
-	switch p {
+func (p NullProvider) ToGRPCProvider() ag.Provider {
+	if !p.Valid {
+		return ag.Provider_UNKOWNPROVIDER
+	}
+
+	val, err := p.Value()
+	if err != nil {
+		return ag.Provider_UNKOWNPROVIDER
+	}
+
+	switch val {
 	case ProviderAPPLE:
 		return ag.Provider_APPLE
 	case ProviderFACEBOOK:
@@ -18,8 +28,7 @@ func (p Provider) ToGRPCProvider() ag.Provider {
 	case ProviderGOOGLE:
 		return ag.Provider_GOOGLE
 	default:
-		// TODO: make this return null
-		return 4
+		return ag.Provider_UNKOWNPROVIDER
 	}
 }
 
@@ -34,7 +43,7 @@ func (t Type) ToGRPCAccountType() ag.Type {
 	case TypeDEV:
 		return ag.Type_DEV
 	default:
-		return ag.Type_USER
+		return ag.Type_UNKOWNTYPE
 	}
 }
 
@@ -51,21 +60,23 @@ func (a Account) ToGRPCAccount() *ag.Account {
 
 const version = 1
 
-func validateSchema(url url.URL) error {
+//go:embed migrations/*.sql
+var fs embed.FS
+
+func migrateSchema(url url.URL) error {
 	url.Scheme = "pgx"
-	url2 := fmt.Sprintf("%v%v", url.String(), "?sslmode=disable")
-	g := g.Github{}
-	d, err := g.Open("github://clubo-app/auth-service/repository/migrations")
+	urlf := fmt.Sprintf("%v%v", url.String(), "?sslmode=disable")
+
+	d, err := iofs.New(fs, "migrations")
 	if err != nil {
 		return err
 	}
-	defer d.Close()
 
-	m, err := migrate.NewWithSourceInstance("github", d, url2)
-
+	m, err := migrate.NewWithSourceInstance("github", d, urlf)
 	if err != nil {
 		return err
 	}
+
 	err = m.Migrate(version) // current version
 	if err != nil && err != migrate.ErrNoChange {
 		return err

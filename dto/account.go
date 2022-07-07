@@ -10,6 +10,6 @@ type Account struct {
 	EmailVerified bool
 	EmailCode     string
 	PasswordHash  string
-	Provider      repository.Provider
+	Provider      repository.NullProvider
 	Type          repository.Type
 }

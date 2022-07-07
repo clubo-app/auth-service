@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *authServer) RegisterUser(ctx context.Context, req *ag.RegisterUserRequest) (*ag.RegisterUserResponse, error) {
+func (s *authServer) RegisterUser(ctx context.Context, req *ag.RegisterUserRequest) (*ag.LoginUserResponse, error) {
 	hash, err := s.pw.HashPassword(req.Password)
 	if err != nil {
 		return nil, utils.HandleError(err)
@@ -32,9 +32,8 @@ func (s *authServer) RegisterUser(ctx context.Context, req *ag.RegisterUserReque
 		EmailVerified: false,
 		EmailCode:     code,
 		PasswordHash:  hash,
-		// TODO: when we have nullable enums replace with null value
-		Provider: repository.ProviderGOOGLE,
-		Type:     repository.TypeUSER,
+		Provider:      repository.NullProvider{Valid: false},
+		Type:          repository.TypeUSER,
 	}
 
 	a, err := s.ac.Create(ctx, da)
@@ -42,13 +41,21 @@ func (s *authServer) RegisterUser(ctx context.Context, req *ag.RegisterUserReque
 		return nil, utils.HandleError(err)
 	}
 
-	t, err := s.token.NewJWT(a)
+	at, err := s.token.NewAccessToken(a)
 	if err != nil {
 		return nil, utils.HandleError(err)
 	}
 
-	return &ag.RegisterUserResponse{
-		Token:   t,
+	rt, err := s.token.NewRefreshToken(a.ID, a.RefreshTokenGeneration)
+	if err != nil {
+		return nil, utils.HandleError(err)
+	}
+
+	return &ag.LoginUserResponse{
+		Tokens: &ag.TokenResponse{
+			AccessToken:  at,
+			RefreshToken: rt,
+		},
 		Account: a.ToGRPCAccount(),
 	}, nil
 }

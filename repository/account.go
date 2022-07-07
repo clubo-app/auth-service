@@ -42,7 +42,7 @@ func NewAccountRepository(dbUser, dbPW, dbName, dbHost string, dbPort uint16) (*
 		return nil, fmt.Errorf("pgx connection error: %w", err)
 	}
 
-	err = validateSchema(connURL)
+	err = migrateSchema(connURL)
 	if err != nil {
 		log.Printf("Schema validation error: %v", err)
 	}

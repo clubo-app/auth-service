@@ -22,13 +22,21 @@ func (s *authServer) LoginUser(ctx context.Context, req *ag.LoginUserRequest) (*
 		return nil, status.Error(codes.InvalidArgument, "Invalid Password")
 	}
 
-	t, err := s.token.NewJWT(a)
+	at, err := s.token.NewAccessToken(a)
+	if err != nil {
+		return nil, utils.HandleError(err)
+	}
+
+	rt, err := s.token.NewRefreshToken(a.ID, a.RefreshTokenGeneration)
 	if err != nil {
 		return nil, utils.HandleError(err)
 	}
 
 	return &ag.LoginUserResponse{
-		Token:   t,
+		Tokens: &ag.TokenResponse{
+			AccessToken:  at,
+			RefreshToken: rt,
+		},
 		Account: a.ToGRPCAccount(),
 	}, nil
 }

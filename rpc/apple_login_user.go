@@ -21,7 +21,7 @@ func (s *authServer) AppleLoginUser(ctx context.Context, req *ag.AppleLoginUserR
 		Email:         claims.Email,
 		EmailVerified: claims.EmailVerified,
 		EmailCode:     code,
-		Provider:      repository.ProviderAPPLE,
+		Provider:      repository.NullProvider{Valid: true, Provider: repository.ProviderAPPLE},
 		Type:          repository.TypeUSER,
 	}
 
@@ -30,13 +30,21 @@ func (s *authServer) AppleLoginUser(ctx context.Context, req *ag.AppleLoginUserR
 		return nil, utils.HandleError(err)
 	}
 
-	t, err := s.token.NewJWT(a)
+	at, err := s.token.NewAccessToken(a)
+	if err != nil {
+		return nil, utils.HandleError(err)
+	}
+
+	rt, err := s.token.NewRefreshToken(a.ID, a.RefreshTokenGeneration)
 	if err != nil {
 		return nil, utils.HandleError(err)
 	}
 
 	return &ag.LoginUserResponse{
-		Token:   t,
+		Tokens: &ag.TokenResponse{
+			AccessToken:  at,
+			RefreshToken: rt,
+		},
 		Account: a.ToGRPCAccount(),
 	}, nil
 }

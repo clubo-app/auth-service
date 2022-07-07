@@ -21,7 +21,7 @@ func (s *authServer) GoogleLoginUser(ctx context.Context, req *ag.GoogleLoginUse
 		Email:         claims.Email,
 		EmailVerified: claims.EmailVerified,
 		EmailCode:     code,
-		Provider:      repository.ProviderGOOGLE,
+		Provider:      repository.NullProvider{Valid: true, Provider: repository.ProviderGOOGLE},
 		Type:          repository.TypeUSER,
 	}
 
@@ -30,13 +30,21 @@ func (s *authServer) GoogleLoginUser(ctx context.Context, req *ag.GoogleLoginUse
 		return nil, utils.HandleError(err)
 	}
 
-	t, err := s.token.NewJWT(a)
+	at, err := s.token.NewAccessToken(a)
+	if err != nil {
+		return nil, utils.HandleError(err)
+	}
+
+	rt, err := s.token.NewRefreshToken(a.ID, a.RefreshTokenGeneration)
 	if err != nil {
 		return nil, utils.HandleError(err)
 	}
 
 	return &ag.LoginUserResponse{
-		Token:   t,
+		Tokens: &ag.TokenResponse{
+			AccessToken:  at,
+			RefreshToken: rt,
+		},
 		Account: a.ToGRPCAccount(),
 	}, nil
 
